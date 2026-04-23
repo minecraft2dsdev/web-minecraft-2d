@@ -3,9 +3,6 @@
 > A browser-based 2D sandbox game inspired by Minecraft and Terraria.  
 > **Current version: alpha 0.0.4** — collisions, falling, auto-jump, and world generation with hills & grass.
 
-![Game screenshot](link_to_screenshot_placeholder)  
-*(Add a screenshot later!)*
-
 ---
 
 ## ✨ Features (so far)
