@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<body>
+
+    <button class="btn" onclick = generateBlock() > 1 блок </button>
+    <button class="btn" onclick = generateLayer() > лейр </button>
+    <button class="btn" onclick = printcoords() > блоки </button>
+    <button class="btn" onclick = smartChoiseLayer() > умни выбор </button>
+    <button class = "btn" onclick = generateOneGrass() > трава слой </button>
+    <button class="btn" onclick=   >воздух</button>
+    <button class="btn" onclick=generateHill() > холм</button>
+    <button class="btn" onclick=autoGenerateWorld()> генерация мира</button>
+    
+    <p id="testext">версия: alpha 0.0.3</p>
+
+</body>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://googleapis.com/ajax/libs/jquery/1.12.1/jquery-ui.min.js"></script>
+<!-- библиотеки -->
+
+    <title>2D майнкрафт!</title> 
+
+    <div class="world"></div>
+<style>
+
+
+
+.playeer{
+
+    width: 50px; 
+    height: 100px;
+    background-color: rgb(97, 97, 255);
+
+}
+
+.world{
+
+    display: grid;
+    grid-template-columns: repeat(100, 50px);
+    grid-template-rows: repeat(40, 50px);
+
+}
+
+#testext {
+
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+
+}
+
+
+
+.btn {
+
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: aqua;
+
+}
+
+.cblgt{
+    
+    width: 50px;
+    height: 50px; /* Добавь высоту, иначе блок будет плоским! */
+    background-image: url(textures/grasstop.webp); /* И цвет, чтобы увидеть его */
+
+}
+
+.cblgt:hover {
+
+    outline: 3px solid white; 
+    outline-offset: -3px;     
+
+}
+
+.cbl{
+
+    width: 50px;
+    height: 50px; 
+    background-image: url(textures/dirt.webp);
+
+}
+
+.cbl:hover {
+   
+    outline: 3px solid white; 
+    outline-offset: -3px;     
+
+}
+
+
+
+</style>
+
+<script>
+   
+
+
+   // let styleTag = document.createElement('style');
+// document.head.appendChild(styleTag)
+    let allblocks = []
+    let bconmp = [] 
+// переменные
+
+
+
+const world = document.querySelector('.world')
+
+function generateLayer() {
+
+   masterGenerator(`cbl`, true, 99)
+
+}
+
+function generateLayerGrass() {
+
+masterGenerator(`cblgt`, true, 99)    
+    
+}
+
+function generateHill() {
+    let finished = false
+    let random = Math.floor(Math.random() * 5) +5
+    let random2 = Math.floor(Math.random() * 6) +2
+    for (let i = 0; i<random2; i++) {
+
+       masterGenerator("", false, 0)
+        lastBlockX = Number(lastBlockX) +1 
+
+    }
+    
+    for (let i = 0; i<random; i++){
+
+        masterGenerator(`cblgt`, true, 0)
+        lastBlockX = Number(lastBlockX)+1
+
+    }
+
+    if (lastBlockX >= 100) {
+
+        lastBlockX = 0
+
+    }
+
+}
+let lastBlockX = 0
+function endLineHill(){
+    
+    let needair = 99 - lastBlockX
+    masterGenerator("", false, needair)
+
+}
+
+function generateOneGrass(){
+
+    masterGenerator(`cblgt`,true, 99)
+
+}    
+
+let landed = true
+let canJump = true
+function makeMove(naprav){
+if (naprav === 'down'){
+if (bconmp.some(block => block.x === playerX  && block.y === playerY)){
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+}
+else {
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+playerY += 50
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+setTimeout(() => {
+
+makeMove('down')
+
+}, 50)
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+}
+
+
+
+}
+if (naprav === 'left'){
+
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+let blockRight = bconmp.some(block => block.x === playerX - 50 && block.y === playerY - 50)
+let stepUp = bconmp.some(block => block.x === playerX - 50 && block.y === playerY  - 100)
+if (!stepUp && blockRight){
+
+playerY -= 50
+playerX  -= 50
+
+} else if (!blockRight) {
+
+playerX -= 50
+
+} else {
+
+
+
+}
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+makeMove('down')
+
+}
+if (naprav === 'right'){
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+let blockRight = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 50)
+let stepUp = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 100)
+if (!stepUp && blockRight){
+
+playerY -= 50
+playerX  += 50
+
+} else if (!blockRight) {
+
+playerX += 50
+
+} else {
+
+
+
+}
+playerX = Math.min(maxx, Math.max(minx, playerX))
+playerY = Math.min(maxy, Math.max(miny, playerY))
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+makeMove('down')
+
+}
+
+if (naprav === 'up'){
+
+if (landed === true){
+
+playerY -= 50
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+
+setTimeout(() => {
+
+makeMove('down')
+landed = true
+canJump = false
+
+
+},500)
+
+if (bconmp.some(block => block.x === playerX -50  && block.y === playerY -50)){
+
+    landed = true
+
+}
+else{
+
+    landed = false
+
+} 
+
+}
+else{
+
+
+
+}
+
+
+
+}
+}
+
+let abj = 0
+
+let blockx = 0
+let blocky = 10
+let bconmpx = 0
+let bconmpy = -2100
+
+function masterGenerator(clas, cords, coun){
+
+ const blocke = document.createElement('div')
+    blocke.className = clas
+    world.appendChild(blocke)
+    
+ if (abj === 100) {
+
+        blocky = blocky-1
+        bconmpy = bconmpy+50
+
+        abj = 0
+        blockx = 0
+        bconmpx = 0
+
+}
+if (cords === true) {
+    allblocks.push({x:blockx, y:blocky})
+    bconmp.push({x:bconmpx, y:bconmpy})    
+    
+}
+    
+    bconmpx = bconmpx+50
+    abj = abj+1
+    blockx = blockx+1
+
+    if (coun !== "0"){
+
+        for (let i = 0; i <coun; i++){
+
+    masterGenerator(clas, cords, 0)
+
+}
+
+}
+
+
+}
+
+function generateBlock(){
+
+    masterGenerator(`cbl`, true, 99)
+
+}
+
+function generateAir() {
+
+    masterGenerator("", false, 99)
+
+}
+
+function generateAirOne() {
+
+    masterGenerator("", false, 0)
+
+}
+
+function printcoords() {
+
+    console.log(allblocks)
+    console.log("X:"+playerX+"Y:"+playerY)
+
+}
+
+function autoGenerateWorld(){
+
+for (let i = 0; i<9; i++){
+
+generateAir()
+
+}
+
+for (let i = 0; i<7; i++){
+
+generateHill()
+
+}
+endLineHill()
+for (let i = 0; i<30; i++){
+
+smartChoiseLayer()
+
+}
+
+}
+
+function smartChoiseLayer() {
+if (allblocks.some(block => block.y < 1)) {
+    
+    generateLayer()
+
+}
+
+else {
+
+    generateLayerGrass()
+}
+
+}
+//x:2200y:-1650
+let playerX = 2500
+let playerY = -1650
+const player = document.createElement('div')
+player.style.position = 'absolute';
+player.style.width = '50px';
+player.style.height = '100px';
+player.style.backgroundColor = 'blue';
+const maxx = 4950
+const minx = 50
+const miny = -2000
+const maxy = -100
+document.body.appendChild(player)
+   player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+document.addEventListener('keydown', (e) => {
+    updCam()
+    switch(e.key){
+
+        case 'ArrowLeft': makeMove('left'); break;
+        case 'ArrowRight': makeMove('right');  break;
+        case 'ArrowUp': makeMove('up');  break;
+        case 'ArrowDown': makeMove('down');  break;
+        befault: return;
+
+    }
+
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+updCam()
+
+function updCam(){
+
+
+
+}
+
+})
+
+autoGenerateWorld()
+
+</script>
+</head>
+</html> 
