@@ -31,14 +31,6 @@
 
 ---
 
-## 🚀 Play now
-
-You can try the latest version here:  
-👉 **[Insert your Netlify/GitHub Pages link]**  
-*(No installation needed – just open in browser)*
-
----
-
 ## 🛠️ Development status
 
 | Version | What’s inside |
