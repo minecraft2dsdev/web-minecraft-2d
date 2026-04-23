@@ -1,7 +1,7 @@
 # 🎮 Minecraft 2D (Browser Game)
 
 > A browser-based 2D sandbox game inspired by Minecraft and Terraria.  
-> **Current version: alpha 0.0.4** — collisions, falling, auto-jump, and world generation with hills & grass.
+> **Current version: alpha 0.0.4** — collisions, falling, auto-jump, and world generation with hills & grass. you can test it on minecraft2d-alpha.netlify.app
 
 ---
 
