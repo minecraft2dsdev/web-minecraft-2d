@@ -9,8 +9,8 @@
     <button class="btn" onclick=   >воздух</button>
     <button class="btn" onclick=generateHill() > холм</button>
     <button class="btn" onclick=autoGenerateWorld()> генерация мира</button>
-    
-    <p id="testext">версия: alpha 0.0.4</p>
+    <div class="inv"></div>
+    <p id="testext">версия: alpha 0.0.5</p>
 
 </body>
 <head>
@@ -87,21 +87,90 @@
 
 }
 
+.inv {
 
+    display: flex;
+    position:fixed;
+    background-image: url(textures/inv.webp);
+    width: 635px;
+    height: 83px;
+    margin-top: 825px;
+    margin-left: 32%;
+
+}
+
+.crest {
+
+    background-image: url(textures/crest.webp);
+    width: 50px;
+    height: 50px;
+    border: 3px red;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 15px;
+    margin-left: 25px;
+    background-color: transparent;
+
+}
+
+.place {
+
+    background-image: url(textures/grasstop.webp);
+     width: 50px;
+    height: 50px;
+    border: 3px red;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 16px;
+    margin-left: 10px;
+
+}
 
 </style>
 
 <script>
-   
 
-
-   // let styleTag = document.createElement('style');
-// document.head.appendChild(styleTag)
-    let allblocks = []
-    let bconmp = [] 
+let allblocks = []
+let bconmp = [] 
 // переменные
 
+const inv = document.querySelector('.inv')
+// block.style.backgroundImage = "url('путь/к/новой/картинке.png')"; для смены 
+// картинки в слот
+let inhand = 0
+let handindex = 0
+let bugfix = false
+let pastIt;
+let xhowICanNameIt;
+function addBlock(classname) {
+const howICanNameIt = handindex
+const invblock = document.createElement('button')
+invblock.id = howICanNameIt
+invblock.onclick = function() {
+    console.log('Now inhand =', howICanNameIt);
+    xhowICanNameIt = howICanNameIt 
+    invblock.style.outline = "3px solid aquamarine"
+       invblock.style.outlineOffset = "-3px"
+       if (bugfix === true && this !== pastIt) {
+    
+        pastIt.style.outline = "0px"
+       pastIt.style.outlineOffset = "0px"
 
+}
+       bugfix = true
+         pastIt = this
+        
+        };
+invblock.className = classname
+inv.appendChild(invblock) 
+
+
+handindex ++
+
+
+}
 
 const world = document.querySelector('.world')
 
@@ -160,7 +229,7 @@ let landed = true
 let canJump = true
 function makeMove(naprav){
 if (naprav === 'down'){
-if (bconmp.some(block => block.x === playerX  && block.y === playerY)){
+if (bconmp.some(block => block.x === playerX  && block.y === playerY )){
 playerX = Math.min(maxx, Math.max(minx, playerX))
 playerY = Math.min(maxy, Math.max(miny, playerY))
 
@@ -189,16 +258,19 @@ if (naprav === 'left'){
 
 playerX = Math.min(maxx, Math.max(minx, playerX))
 playerY = Math.min(maxy, Math.max(miny, playerY))
-let blockRight = bconmp.some(block => block.x === playerX - 50 && block.y === playerY - 50)
-let stepUp = bconmp.some(block => block.x === playerX - 50 && block.y === playerY  - 100)
-if (!stepUp && blockRight){
+let localand = false
+let blockLeft = bconmp.some(block => block.x === playerX - 50 && block.y === playerY - 50)
+let stepUp = bconmp.some(block => block.x === playerX - 50 && block.y === playerY  - 150)
+let blockLeftUp = bconmp.some(block => block.x === playerX - 50 && block.y === playerY - 100)
+if (!stepUp && blockLeft && landed === true && !blockLeftUp){
 
-playerY -= 50
+makeMove('upeasy')
 playerX  -= 50
 
-} else if (!blockRight) {
+} else if (!blockLeft && !blockLeftUp) {
 
 playerX -= 50
+makeMove('down')
 
 } else {
 
@@ -208,22 +280,26 @@ playerX -= 50
 playerX = Math.min(maxx, Math.max(minx, playerX))
 playerY = Math.min(maxy, Math.max(miny, playerY))
 player.style.transform = `translate(${playerX}px, ${playerY}px)`;
-makeMove('down')
+
 
 }
 if (naprav === 'right'){
 playerX = Math.min(maxx, Math.max(minx, playerX))
 playerY = Math.min(maxy, Math.max(miny, playerY))
 let blockRight = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 50)
-let stepUp = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 100)
-if (!stepUp && blockRight){
+let blockRightUp = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 100)
+let stepUp = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 150)
+let airUp = bconmp.some(block => block.x === playerX && block.y === playerY - 50)
+if (!stepUp && blockRight && !blockRightUp && !airUp) {
 
-playerY -= 50
+makeMove('upeasy')
 playerX  += 50
 
-} else if (!blockRight) {
+
+} else if (!blockRight && !blockRightUp ) {
 
 playerX += 50
+makeMove('down')
 
 } else {
 
@@ -233,14 +309,15 @@ playerX += 50
 playerX = Math.min(maxx, Math.max(minx, playerX))
 playerY = Math.min(maxy, Math.max(miny, playerY))
 player.style.transform = `translate(${playerX}px, ${playerY}px)`;
-makeMove('down')
+
 
 }
 
 if (naprav === 'up'){
 
 if (landed === true){
-
+if (bconmp.some(block => block.x === playerX && block.y === playerY - 50)){}
+else {
 playerY -= 50
 player.style.transform = `translate(${playerX}px, ${playerY}px)`;
 
@@ -252,8 +329,8 @@ canJump = false
 
 
 },500)
-
-if (bconmp.some(block => block.x === playerX -50  && block.y === playerY -50)){
+}
+if (bconmp.some(block => block.x === playerX  && block.y === playerY )){
 
     landed = true
 
@@ -274,22 +351,103 @@ else{
 
 
 }
+if (naprav === "upeasy"){
+let easylanded = true
+if (landed === true){
+
+playerY -= 50
+player.style.transform = `translate(${playerX}px, ${playerY}px)`;
+
+easylanded = true
+canJump = false
+
+
+if (bconmp.some(block => block.x === playerX  && block.y === playerY -50)){
+
+    easylanded = true
+
+}
+else{
+
+    easylanded = false
+
+} 
+
+}
+else{
+
+
+
 }
 
-let abj = 0
 
-let blockx = 0
-let blocky = 10
-let bconmpx = 0
-let bconmpy = -2100
+}
+} 
+ 
+let abj = 0 
+ 
+let blockx = 0 
+let blocky = 10 
+let bconmpx = 0 
+let bconmpy = -2100 
 
-function masterGenerator(clas, cords, coun){
+let trueblockid = 0
 
- const blocke = document.createElement('div')
-    blocke.className = clas
-    world.appendChild(blocke)
+
+function masterGenerator(clas, cords, coun){ 
+
+ const blocke = document.createElement('div') 
+ blocke.className = clas 
+ blocke.id = trueblockid 
+ blocke.dataset.px = bconmpx
+ blocke.dataset.py = bconmpy
+ blocke.dataset.id = trueblockid
+ world.appendChild(blocke) 
     
- if (abj === 100) {
+ 
+        if (clas === clas){ 
+        blocke.addEventListener('click', function(){ 
+            
+            console.log(xhowICanNameIt)
+            if (xhowICanNameIt === 0){
+        let blockid = parseInt(this.id)
+        let index = bconmp.findIndex(block => block.id === blockid)
+        if (index !== -1) {
+
+            
+             bconmp.splice(index, 1)
+            makeMove('dovn')
+             this.className = ""
+        
+       }
+        
+        }else{
+
+            if (this.className === ""){
+
+                this.classList.add(`cblgt`)
+                let yneed = parseInt(this.dataset.py)
+                let xneed = parseInt(this.dataset.px)
+                let idneed = trueblockid
+                allblocks.push({x:blockx, y:blocky})
+                bconmp.push({x:xneed, y:yneed, active:true, id:idneed})    
+                trueblockid ++
+
+            }
+
+        }
+        
+    }
+)        
+      
+
+
+
+
+}
+
+
+if (abj === 100) {
 
         blocky = blocky-1
         bconmpy = bconmpy+50
@@ -301,7 +459,7 @@ function masterGenerator(clas, cords, coun){
 }
 if (cords === true) {
     allblocks.push({x:blockx, y:blocky})
-    bconmp.push({x:bconmpx, y:bconmpy})    
+    bconmp.push({x:bconmpx, y:bconmpy, active:true, id:trueblockid})    
     
 }
     
@@ -319,7 +477,7 @@ if (cords === true) {
 
 }
 
-
+ trueblockid += 1   
 }
 
 function generateBlock(){
@@ -390,7 +548,7 @@ player.style.position = 'absolute';
 player.style.width = '50px';
 player.style.height = '100px';
 player.style.backgroundColor = 'blue';
-const maxx = 4950
+const maxx = 4900
 const minx = 50
 const miny = -2000
 const maxy = -100
@@ -419,7 +577,11 @@ function updCam(){
 
 })
 
+
+
 autoGenerateWorld()
+addBlock(`crest`)
+addBlock(`place`)
 
 </script>
 </head>
