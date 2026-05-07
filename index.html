@@ -149,7 +149,6 @@ const howICanNameIt = handindex
 const invblock = document.createElement('button')
 invblock.id = howICanNameIt
 invblock.onclick = function() {
-    console.log('Now inhand =', howICanNameIt);
     xhowICanNameIt = howICanNameIt 
     invblock.style.outline = "3px solid aquamarine"
        invblock.style.outlineOffset = "-3px"
@@ -407,8 +406,6 @@ function masterGenerator(clas, cords, coun){
  
         if (clas === clas){ 
         blocke.addEventListener('click', function(){ 
-            
-            console.log(xhowICanNameIt)
             if (xhowICanNameIt === 0){
         let blockid = parseInt(this.id)
         let index = bconmp.findIndex(block => block.id === blockid)
