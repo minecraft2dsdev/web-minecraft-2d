@@ -28,7 +28,7 @@
 | ↑              | Jump (manual)              |
 | ↓              | Fall down / step off       |
 | 🖱️ Left click  | Destroy OR place block (depends on inventory selection) |
-
+|----------------|----------------------------|
 ---
 
 ## 🛠️ Development status
@@ -54,6 +54,12 @@ Created by **minecraft2dsdev**
 Special thanks to **DeepSeek** (he gave me hints) and everyone who tested the early versions.  
 Cookies for everyone 🍪
 
+---
+
+## ❗ Needs for launch game
+ To run the game, you need to launch a local server.  
+**Do not open `index.html` directly in your browser** – the game won't load properly.  
+Use **Live Server** in VS Code or any other local server tool.
 ---
 
 ## 💬 Feedback & contributions
