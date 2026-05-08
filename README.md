@@ -58,7 +58,7 @@ Cookies for everyone 🍪
 
 ## ❗ Needs for launch game
  To run the game, you need to launch a local server.  
-**Do not open `index.html` directly in your browser** – the game won't load properly.  
+Do not open `index.html` directly in your browser – the game won't load properly.  
 Use **Live Server** in VS Code or any other local server tool.
 ---
 
