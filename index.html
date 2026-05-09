@@ -289,7 +289,8 @@ let blockRight = bconmp.some(block => block.x === playerX + 50 && block.y === pl
 let blockRightUp = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 100)
 let stepUp = bconmp.some(block => block.x === playerX + 50 && block.y === playerY - 150)
 let airUp = bconmp.some(block => block.x === playerX && block.y === playerY - 50)
-if (!stepUp && blockRight && !blockRightUp && !airUp) {
+
+if (!stepUp && blockRight && !blockRightUp && !airUp && landed === true) {
 
 makeMove('upeasy')
 playerX  += 50
@@ -299,6 +300,7 @@ playerX  += 50
 
 playerX += 50
 makeMove('down')
+
 
 } else {
 
@@ -407,28 +409,33 @@ function masterGenerator(clas, cords, coun){
         if (clas === clas){ 
         blocke.addEventListener('click', function(){ 
             if (xhowICanNameIt === 0){
-        let blockid = parseInt(this.id)
+        
+                let blockid = parseInt(this.id)
+       
         let index = bconmp.findIndex(block => block.id === blockid)
-       // if (index !== -1) {
+       if (index !== -1) {
 
             
              bconmp.splice(index, 1)
             makeMove('dovn')
              this.className = ""
         
-     //  }
+      }
         
         }else{
 
             if (this.className === ""){
-
+                let idneed = trueblockid
+                this.id = idneed;
+                this.dataset.id = idneed;
                 this.classList.add(`cblgt`)
                 let yneed = parseInt(this.dataset.py)
                 let xneed = parseInt(this.dataset.px)
-                let idneed = trueblockid
+
                 allblocks.push({x:blockx, y:blocky})
                 bconmp.push({x:xneed, y:yneed, active:true, id:idneed})    
                 trueblockid ++
+
 
             }
 
